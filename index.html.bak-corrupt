@@ -1,0 +1,397 @@
+     1|<!doctype html>
+     2|<html lang="en">
+     3|<head>
+     4|  <meta charset="UTF-8" />
+     5|  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     6|  <title>Aletheion — Autonomous Intelligence Platform</title>
+     7|  <link rel="preconnect" href="https://fonts.googleapis.com">
+     8|  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     9|  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    10|  <style>
+    11|    :root{
+    12|      --bg:#06070b;
+    13|      --bg-soft:#0b0f17;
+    14|      --text:#f5f7ff;
+    15|      --muted:#9ca3b5;
+    16|      --nvidia:#76b900;
+    17|      --purple:#8a4dff;
+    18|      --purple-deep:#5f2eea;
+    19|      --gold:#f5c84c;
+    20|      --cyan:#2de2ff;
+    21|      --card:#0f1420cc;
+    22|      --line:#1d2536;
+    23|      --shadow:0 20px 60px rgba(0,0,0,.45);
+    24|    }
+    25|
+    26|    *{box-sizing:border-box}
+    27|    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    28|    body{overflow-x:hidden}
+    29|
+    30|    .noise::before{
+    31|      content:"";position:fixed;inset:0;pointer-events:none;opacity:.08;
+    32|      background-image:radial-gradient(rgba(255,255,255,.6) .5px, transparent .5px);
+    33|      background-size:3px 3px;z-index:1;
+    34|    }
+    35|
+    36|    .aurora{
+    37|      position:fixed;inset:-20% -10% auto -10%;height:70vh;pointer-events:none;z-index:0;
+    38|      background:
+    39|        radial-gradient(45% 55% at 12% 20%, rgba(118,185,0,.22), transparent 70%),
+    40|        radial-gradient(35% 45% at 78% 18%, rgba(138,77,255,.28), transparent 70%),
+    41|        radial-gradient(35% 50% at 62% 8%, rgba(245,200,76,.20), transparent 75%),
+    42|        radial-gradient(40% 50% at 42% 35%, rgba(45,226,255,.12), transparent 80%);
+    43|      filter:blur(20px);
+    44|    }
+    45|
+    46|    .container{width:min(1180px,92vw);margin:0 auto;position:relative;z-index:2}
+    47|
+    48|    .nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0;position:sticky;top:0;background:linear-gradient(to bottom, rgba(6,7,11,.9), rgba(6,7,11,.4));backdrop-filter:blur(10px);z-index:10}
+    49|    .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.3px;font-size:1.15rem}
+    50|    .brand-title{
+    51|      background:linear-gradient(90deg,#eafff2 0%,#9ef252 26%,#b98dff 62%,#ffd56a 100%);
+    52|      -webkit-background-clip:text;background-clip:text;color:transparent;
+    53|      text-shadow:0 0 24px rgba(118,185,0,.28),0 0 24px rgba(138,77,255,.24)
+    54|    }
+    55|    .brand-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--nvidia),var(--purple));box-shadow:0 0 20px var(--nvidia)}
+    56|    .nav a{color:var(--muted);text-decoration:none;margin-left:24px;font-weight:500}
+    57|    .nav a:hover{color:var(--text)}
+    58|    .lang-switch{display:inline-flex;gap:6px;margin-left:14px;vertical-align:middle}
+    59|    .lang-btn{padding:7px 10px;border-radius:10px;border:1px solid #33405b;background:#0d1320;color:#c8d2e9;font-weight:700;font-size:.78rem;cursor:pointer}
+    60|    .lang-btn.active{background:linear-gradient(120deg,var(--nvidia),var(--purple));color:#04060a;border-color:transparent}
+    61|
+    62|    .btn{
+    63|      display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;
+    64|      border:1px solid #2a3348;color:var(--text);text-decoration:none;font-weight:600;
+    65|      transition:.22s ease;cursor:pointer
+    66|    }
+    67|    .btn:hover{transform:translateY(-1px);border-color:#3d4a67}
+    68|    .btn-primary{
+    69|      border:1px solid transparent;
+    70|      background:linear-gradient(120deg,var(--nvidia),var(--purple),var(--gold));
+    71|      color:#050608;box-shadow:0 10px 30px rgba(118,185,0,.25),0 10px 30px rgba(138,77,255,.2)
+    72|    }
+    73|
+    74|    .hero{padding:84px 0 52px;display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center}
+    75|    .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border:1px solid #2a3348;border-radius:999px;background:#0d1320;color:#c4ccdd;font-size:12px;font-weight:600;letter-spacing:.25px}
+    76|    .eyebrow b{color:var(--nvidia)}
+    77|
+    78|    h1{font-size:clamp(2.2rem,6vw,4.1rem);line-height:1.04;margin:16px 0 14px;letter-spacing:-.03em}
+    79|    .headline-glow{
+    80|      background:linear-gradient(100deg,#fff 0%,#d6ffe0 22%,#cbb3ff 44%,#ffe7a8 66%,#fff 90%);
+    81|      -webkit-background-clip:text;background-clip:text;color:transparent
+    82|    }
+    83|    .sub{color:var(--muted);font-size:1.06rem;line-height:1.7;max-width:62ch}
+    84|
+    85|    .hero-cta{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+    86|    .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;color:#9fb08a;font-size:.92rem}
+    87|    .meta span{color:#9ca3b5}
+    88|
+    89|    .hero-card{
+    90|      position:relative;border:1px solid #263149;background:linear-gradient(180deg,#10182a, #0c1220 55%, #0a0f1b);
+    91|      border-radius:18px;padding:20px;box-shadow:var(--shadow);
+    92|      transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    93|      transform-style:preserve-3d
+    94|    }
+    95|    .hero-card.interactive:hover{
+    96|      border-color:#3b4f7a;
+    97|      box-shadow:0 24px 70px rgba(0,0,0,.52), 0 0 34px rgba(138,77,255,.2)
+    98|    }
+    99|    .hero-card::after{
+   100|      content:"";position:absolute;inset:-1px;border-radius:18px;pointer-events:none;
+   101|      background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%), rgba(118,185,0,.14), transparent 45%);
+   102|      opacity:.7
+   103|    }
+   104|    .hero-card:before{
+   105|      content:"";position:absolute;inset:-1px;border-radius:18px;padding:1px;
+   106|      background:linear-gradient(130deg,rgba(118,185,0,.75),rgba(138,77,255,.75),rgba(245,200,76,.6));
+   107|      -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+   108|      -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none
+   109|    }
+   110|    .terminal{background:#070b13;border:1px solid #263149;border-radius:12px;padding:14px;font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;font-size:.84rem;line-height:1.65;color:#cbd6ef}
+   111|    .line-g{color:#8de65a}.line-p{color:#b891ff}.line-y{color:#ffd972}
+   112|
+   113|    .section{padding:60px 0}
+   114|    .section h2{font-size:clamp(1.5rem,3vw,2.3rem);letter-spacing:-.02em;margin:0 0 10px}
+   115|    .section p.lead{margin:0;color:var(--muted);max-width:68ch;line-height:1.7}
+   116|
+   117|    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+   118|    .card{
+   119|      background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);
+   120|      transition:.22s ease;position:relative;overflow:hidden
+   121|    }
+   122|    .card:after{content:"";position:absolute;inset:auto -30% -70% -30%;height:120px;background:radial-gradient(closest-side,rgba(138,77,255,.18),transparent 75%)}
+   123|    .card:hover{transform:translateY(-3px);border-color:#33405b}
+   124|    .tag{display:inline-block;font-size:.72rem;padding:5px 8px;border:1px solid #2c3750;border-radius:8px;color:#bcc8de;background:#0e1422;margin-bottom:8px}
+   125|    .card h3{margin:6px 0 8px;font-size:1.05rem}
+   126|    .card p{margin:0;color:var(--muted);line-height:1.65;font-size:.95rem}
+   127|
+   128|    .split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+   129|    .panel{background:linear-gradient(160deg,#0d1322,#0a0f1a);border:1px solid #24304a;border-radius:16px;padding:18px}
+   130|    .panel h4{margin:0 0 10px;font-size:1.02rem}
+   131|    .bullet{display:flex;gap:10px;align-items:flex-start;color:#c8d2e9;margin:9px 0;line-height:1.5}
+   132|    .bullet i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-top:8px;background:linear-gradient(145deg,var(--nvidia),var(--gold));box-shadow:0 0 14px rgba(118,185,0,.5)}
+   133|
+   134|    .cta{
+   135|      margin:62px 0 80px;padding:26px;border-radius:18px;border:1px solid #2b3450;
+   136|      background:linear-gradient(110deg,rgba(118,185,0,.14),rgba(138,77,255,.16),rgba(245,200,76,.12));
+   137|      display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap
+   138|    }
+   139|    .cta h3{margin:0;font-size:1.35rem}
+   140|    .cta p{margin:5px 0 0;color:#d3dbed}
+   141|
+   142|    .footer{padding:22px 0 40px;color:#8f98ad;font-size:.9rem;border-top:1px solid #1b2233}
+   143|
+   144|    @media (max-width: 980px){
+   145|      .hero{grid-template-columns:1fr}
+   146|      .grid-3{grid-template-columns:1fr 1fr}
+   147|      .split{grid-template-columns:1fr}
+   148|    }
+   149|    @media (max-width: 680px){
+   150|      .nav a{display:none}
+   151|      .grid-3{grid-template-columns:1fr}
+   152|      .hero{padding-top:52px}
+   153|    }
+   154|  </style>
+   155|</head>
+   156|<body>
+   157|  <div class="aurora"></div>
+   158|  <div class="noise"></div>
+   159|
+   160|  <div class="container">
+   161|    <nav class="nav">
+   162|      <div class="brand"><span class="brand-dot"></span> <span class="brand-title">Aletheion Agent</span></div>
+   163|      <div>
+   164|        <a id="navPlatform" href="#platform">Platform</a>
+   165|        <a id="navSecurity" href="#security">Security</a>
+   166|        <a id="navUseCases" href="#use-cases">Use Cases</a>
+   167|        <button id="langEN" class="lang-btn active" type="button">EN</button>
+   168|        <button id="langFR" class="lang-btn" type="button">FR</button>
+   169|        <a id="navDemo" class="btn btn-primary" href="#demo">Book Demo</a>
+   170|      </div>
+   171|    </nav>
+   172|
+   173|    <header class="hero">
+   174|      <div>
+   175|        <span id="eyebrow" class="eyebrow">AUTONOMOUS AI STACK <b>• ENTERPRISE READY</b></span>
+   176|        <h1><span id="heroTitle" class="headline-glow">Aletheion Agent — Think Bigger. Ship Faster. Operate Smarter.</span></h1>
+   177|        <p id="heroSub" class="sub">
+   178|          The flagship autonomous agent platform for teams that need measurable outcomes: orchestrated tools,
+   179|          memory-driven execution, subagent delegation, and secure automation across cloud or local environments.
+   180|        </p>
+   181|        <div class="hero-cta">
+   182|          <a id="heroCta1" class="btn btn-primary" href="#demo">Launch a Pilot</a>
+   183|          <a id="heroCta2" class="btn" href="#platform">View Architecture</a>
+   184|        </div>
+   185|        <div class="meta">
+   186|          <div><b style="color:var(--nvidia)">30–50%</b> <span id="meta1">ops cost reduction</span></div>
+   187|          <div><b style="color:var(--purple)">2–3x</b> <span id="meta2">faster delivery cycles</span></div>
+   188|          <div><b style="color:var(--gold)">SOC2-ready</b> <span id="meta3">auditability layer</span></div>
+   189|        </div>
+   190|      </div>
+   191|
+   192|      <aside class="hero-card interactive" id="heroInteractiveCard">
+   193|        <div class="terminal">
+   194|          <div id="term1"><span class="line-g">$</span> orchestrer --workflow "gestion-incident"</div>
+   195|          <div id="term2">→ Detected anomaly in prod-cluster-eu-west</div>
+   196|          <div id="term3">→ Spawned 3 subagents for triage + root-cause</div>
+   197|          <div id="term4">→ Opened Jira ticket with diagnostics bundle</div>
+   198|          <div id="term5">→ Proposed rollback patch + canary verification</div>
+   199|          <div id="term6"><span class="line-p">Security:</span> TLS 1.3 | RBAC | immutable logs enabled</div>
+   200|          <div id="term7"><span class="line-y">Deployment:</span> VPC + on-prem mirror active</div>
+   201|        </div>
+   202|      </aside>
+   203|    </header>
+   204|
+   205|    <section id="platform" class="section">
+   206|      <h2 id="platformTitle">Core platform designed for high-leverage teams</h2>
+   207|      <p id="platformLead" class="lead">Neon-infused design, hard engineering underneath: every feature exists to reduce friction between strategy and execution.</p>
+   208|
+   209|      <div class="grid-3">
+   210|        <article class="card">
+   211|          <span id="tag1" class="tag">Execution</span>
+   212|          <h3 id="card1Title">Tool Orchestration Engine</h3>
+   213|          <p id="card1Body">Chain terminal, APIs, web, files, and scripts in one reasoning loop. Replace glue-code and manual handoffs with auditable automation.</p>
+   214|        </article>
+   215|        <article class="card">
+   216|          <span id="tag2" class="tag">Intelligence</span>
+   217|          <h3 id="card2Title">Persistent Memory + Skills</h3>
+   218|          <p id="card2Body">Retain patterns from successful runs. Turn repeated solutions into reusable skills your whole team can invoke instantly.</p>
+   219|        </article>
+   220|        <article class="card">
+   221|          <span id="tag3" class="tag">Scale</span>
+   222|          <h3 id="card3Title">Subagent Parallelism</h3>
+   223|          <p id="card3Body">Spawn focused agents for research, debugging, and analysis in parallel — merge outputs into one executive-grade decision stream.</p>
+   224|        </article>
+   225|      </div>
+   226|    </section>
+   227|
+   228|    <section id="security" class="section">
+   229|      <h2 id="securityTitle">Security posture that wins enterprise trust</h2>
+   230|      <p id="securityLead" class="lead">NVIDIA green signals performance. Purple/gold accents signal premium intelligence. Your controls stay strict.</p>
+   231|
+   232|      <div class="split">
+   233|        <div class="panel">
+   234|          <h4 id="secPanel1Title">Cloud + Private VPC</h4>
+   235|          <div class="bullet"><i></i><span id="sec1b1">Per-profile isolation for credentials, memory, tools, and automations.</span></div>
+   236|          <div class="bullet"><i></i><span id="sec1b2">Encryption in transit and at rest with customer-controlled key strategy.</span></div>
+   237|          <div class="bullet"><i></i><span id="sec1b3">SIEM-ready logs for SOC2, ISO 27001, GDPR, HIPAA evidence paths.</span></div>
+   238|        </div>
+   239|        <div class="panel">
+   240|          <h4 id="secPanel2Title">On-Prem + Air-Gapped</h4>
+   241|          <div class="bullet"><i></i><span id="sec2b1">Run in local-only environments with zero internet egress.</span></div>
+   242|          <div class="bullet"><i></i><span id="sec2b2">Model routing and tool allowlists constrained by environment policy.</span></div>
+   243|          <div class="bullet"><i></i><span id="sec2b3">Deterministic audit trail for every tool call, output, and decision step.</span></div>
+   244|        </div>
+   245|      </div>
+   246|    </section>
+   247|
+   248|    <section id="use-cases" class="section">
+   249|      <h2 id="useCasesTitle">Real use cases with measurable impact</h2>
+   250|      <div class="grid-3">
+   251|        <article class="card">
+   252|          <span id="ucTag1" class="tag">FinOps</span>
+   253|          <h3 id="uc1Title">Autonomous Reconciliation</h3>
+   254|          <p id="uc1Body">Continuously reconcile ledgers, flag anomalies, and generate compliance-ready reports with human-in-the-loop approvals.</p>
+   255|        </article>
+   256|        <article class="card">
+   257|          <span id="ucTag2" class="tag">DevOps</span>
+   258|          <h3 id="uc2Title">Incident Co-Pilot</h3>
+   259|          <p id="uc2Body">From alert to diagnosis to rollback proposal in minutes, with subagent-driven triage and postmortem draft generation.</p>
+   260|        </article>
+   261|        <article class="card">
+   262|          <span id="ucTag3" class="tag">Growth</span>
+   263|          <h3 id="uc3Title">Content + SEO Machine</h3>
+   264|          <p id="uc3Body">Run keyword discovery, draft creation, technical SEO scans, and weekly optimization reports from one autonomous pipeline.</p>
+   265|        </article>
+   266|      </div>
+   267|    </section>
+   268|
+   269|    <section id="demo" class="cta">
+   270|      <div>
+   271|        <h3 id="ctaTitle">Ready to ship your first autonomous workflow?</h3>
+   272|        <p id="ctaSub">Get a tailored architecture + security fit assessment and a pilot blueprint in days.</p>
+   273|      </div>
+   274|      <div style="display:flex;gap:10px;flex-wrap:wrap">
+   275|        <a id="ctaDemo" class="btn btn-primary" href="mailto:info@aletheion.ai?subject=Aletheion%20Demo%20Request">Request Demo</a>
+   276|        <a id="briefEN" class="btn" href="Aletheion_Brief.pdf" download="Aletheion_Brief.pdf">Download Brief (EN)</a>
+   277|        <a id="briefFR" class="btn" href="Aletheion_Brief_FR.pdf" download="Aletheion_Brief_FR.pdf">Télécharger la présentation (FR)</a>
+   278|      </div>
+   279|    </section>
+   280|
+   281|    <footer class="footer">
+   282|      <span id="footerText">© Aletheion — Autonomous Intelligence Platform. Built for operators, security teams, and founders.</span>
+   283|    </footer>
+   284|  </div>
+   285|  <script>
+   286|    (() => {
+   287|      const card = document.getElementById('heroInteractiveCard');
+   288|      if (!card) return;
+   289|
+   290|      card.addEventListener('mousemove', (e) => {
+   291|        const r = card.getBoundingClientRect();
+   292|        const x = e.clientX - r.left;
+   293|        const y = e.clientY - r.top;
+   294|        const rx = ((y / r.height) - 0.5) * -5;
+   295|        const ry = ((x / r.width) - 0.5) * 7;
+   296|
+   297|        card.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-2px)`;
+   298|        card.style.setProperty('--mx', `${x}px`);
+   299|        card.style.setProperty('--my', `${y}px`);
+   300|      });
+   301|
+   302|      card.addEventListener('mouseleave', () => {
+   303|        card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)';
+   304|        card.style.setProperty('--mx', '50%');
+   305|        card.style.setProperty('--my', '50%');
+   306|      });
+   const t = {
+     en: {
+       navPlatform: 'Platform', navSecurity: 'Security', navUseCases: 'Use Cases', navDemo: 'Book Demo',
+       eyebrow: 'AUTONOMOUS AI STACK <b>• ENTERPRISE READY</b>',
+       heroTitle: 'Aletheion Agent — Think Bigger. Ship Faster. Operate Smarter.',
+       heroSub: 'The flagship autonomous agent platform for teams that need measurable outcomes: orchestrated tools, memory-driven execution, subagent delegation, and secure automation across cloud or local environments.',
+       heroCta1: 'Launch a Pilot', heroCta2: 'View Architecture',
+       meta1: 'ops cost reduction', meta2: 'faster delivery cycles', meta3: 'auditability layer',
+       term1: '$ orchestrate --workflow "incident-response"',
+       term2: '→ Detected anomaly in prod-cluster-eu-west',
+       term3: '→ Spawned 3 subagents for triage + root-cause',
+       term4: '→ Opened Jira ticket with diagnostics bundle',
+       term5: '→ Proposed rollback patch + canary verification',
+       term6: 'Security: TLS 1.3 | RBAC | immutable logs enabled',
+       term7: 'Deployment: VPC + on-prem mirror active',
+       platformTitle: 'Core platform designed for high-leverage teams',
+       platformLead: 'Neon-infused design, hard engineering underneath: every feature exists to reduce friction between strategy and execution.',
+       tag1: 'Execution', card1Title: 'Tool Orchestration Engine', card1Body: 'Chain terminal, APIs, web, files, and scripts in one reasoning loop. Replace glue-code and manual handoffs with auditable automation.',
+       tag2: 'Intelligence', card2Title: 'Persistent Memory + Skills', card2Body: 'Retain patterns from successful runs. Turn repeated solutions into reusable skills your whole team can invoke instantly.',
+       tag3: 'Scale', card3Title: 'Subagent Parallelism', card3Body: 'Spawn focused agents for research, debugging, and analysis in parallel — merge outputs into one executive-grade decision stream.',
+       securityTitle: 'Security posture that wins enterprise trust',
+       securityLead: 'NVIDIA green signals performance. Purple/gold accents signal premium intelligence. Your controls stay strict.',
+       secPanel1Title: 'Cloud + Private VPC', sec1b1: 'Per-profile isolation for credentials, memory, tools, and automations.', sec1b2: 'Encryption in transit and at rest with customer-controlled key strategy.', sec1b3: 'SIEM-ready logs for SOC2, ISO 27001, GDPR, HIPAA evidence paths.',
+       secPanel2Title: 'On-Prem + Air-Gapped', sec2b1: 'Run in local-only environments with zero internet egress.', sec2b2: 'Model routing and tool allowlists constrained by environment policy.', sec2b3: 'Deterministic audit trail for every tool call, output, and decision step.',
+       useCasesTitle: 'Real use cases with measurable impact',
+       ucTag1: 'FinOps', uc1Title: 'Autonomous Reconciliation', uc1Body: 'Continuously reconcile ledgers, flag anomalies, and generate compliance-ready reports with human-in-the-loop approvals.',
+       ucTag2: 'DevOps', uc2Title: 'Incident Co-Pilot', uc2Body: 'From alert to diagnosis to rollback proposal in minutes, with subagent-driven triage and postmortem draft generation.',
+       ucTag3: 'Growth', uc3Title: 'Content + SEO Machine', uc3Body: 'Run keyword discovery, draft creation, technical SEO scans, and weekly optimization reports from one autonomous pipeline.',
+       ctaTitle: 'Ready to ship your first autonomous workflow?',
+       ctaSub: 'Get a tailored architecture + security fit assessment and a pilot blueprint in days.',
+       ctaDemo: 'Request Demo',
+       briefEN: 'Download Brief (EN)', briefFR: 'Télécharger la présentation (FR)',
+       footerText: '© Aletheion — Autonomous Intelligence Platform. Built for operators, security teams, and founders.',
+       htmlLang: 'en'
+     },
+     fr: {
+       navPlatform: 'Plateforme', navSecurity: 'Sécurité', navUseCases: 'Cas d\'usage', navDemo: 'Réserver une démo',
+       eyebrow: 'STACK IA AUTONOME <b>• PRÊTE POUR L\'ENTREPRISE</b>',
+       heroTitle: 'Aletheion Agent — Voyez plus grand. Livrez plus vite. Opérez plus intelligemment.',
+       heroSub: 'La plateforme d\'agents autonomes de référence pour les équipes qui exigent des résultats mesurables : orchestration d\'outils, exécution pilotée par la mémoire, délégation à des sous-agents et automatisation sécurisée en environnements cloud ou locaux.',
+       heroCta1: 'Lancer un pilote', heroCta2: 'Voir l\'architecture',
+       meta1: 'de réduction des coûts d\'exploitation', meta2: 'cycles de livraison plus rapides', meta3: 'couche d\'auditabilité',
+       term1: '$ orchestrer --workflow "gestion-incident"',
+       term2: '→ Anomalie détectée sur prod-cluster-eu-west',
+       term3: '→ 3 sous-agents lancés pour triage + analyse de cause racine',
+       term4: '→ Ticket Jira ouvert avec dossier de diagnostics',
+       term5: '→ Correctif de retour arrière + vérification canari proposés',
+       term6: 'Sécurité: TLS 1.3 | RBAC | journaux immuables activés',
+       term7: 'Déploiement: VPC + miroir on-prem actif',
+       platformTitle: 'Une plateforme cœur conçue pour les équipes à fort impact',
+       platformLead: 'Un design distinctif, une ingénierie de haut niveau : chaque fonctionnalité réduit les frictions entre stratégie et exécution.',
+       tag1: 'Exécution', card1Title: 'Moteur d\'orchestration des outils', card1Body: 'Enchaînez terminal, API, web, fichiers et scripts dans une même boucle de raisonnement. Remplacez le code d\'assemblage et les transferts manuels par une automatisation traçable.',
+       tag2: 'Intelligence', card2Title: 'Mémoire persistante + compétences', card2Body: 'Capitalisez sur les schémas issus des exécutions réussies. Transformez les solutions récurrentes en compétences réutilisables, mobilisables instantanément par toute l\'équipe.',
+       tag3: 'Échelle', card3Title: 'Parallélisme des sous-agents', card3Body: 'Déployez des agents spécialisés en recherche, débogage et analyse en parallèle, puis consolidez les résultats dans un flux décisionnel de niveau exécutif.',
+       securityTitle: 'Un niveau de sécurité qui inspire la confiance des entreprises',
+       securityLead: 'Le vert NVIDIA incarne la performance. Les accents violet et or reflètent une intelligence premium. Vos contrôles restent stricts.',
+       secPanel1Title: 'Cloud + VPC privé', sec1b1: 'Isolation par profil des identifiants, de la mémoire, des outils et des automatisations.', sec1b2: 'Chiffrement en transit et au repos avec une stratégie de gestion des clés pilotée par le client.', sec1b3: 'Journaux compatibles SIEM pour les exigences de preuve SOC2, ISO 27001, RGPD et HIPAA.',
+       secPanel2Title: 'Sur site + isolé (air-gap)',sec2b1: 'Exécutez en environnements strictement locaux, sans aucune sortie Internet.', sec2b2: 'Routage des modèles et listes d\'autorisation d\'outils contraints par la politique d\'environnement.', sec2b3: 'Piste d\'audit déterministe pour chaque appel d\'outil, sortie et étape de décision.',
+       useCasesTitle: 'Des cas d\'usage concrets à impact mesurable',
+       ucTag1: 'FinOps', uc1Title: 'Rapprochement autonome', uc1Body: 'Rapprochez en continu les écritures, signalez les anomalies et générez des rapports prêts pour la conformité, avec validation humaine dans la boucle.',
+       ucTag2: 'DevOps', uc2Title: 'Copilote incident', uc2Body: 'Passez de l\'alerte au diagnostic puis à une proposition de retour arrière en quelques minutes, grâce au triage piloté par sous-agents et à la génération d\'un brouillon de post-mortem.',
+       ucTag3: 'Croissance', uc3Title: 'Moteur contenu + SEO', uc3Body: 'Pilotez la découverte de mots-clés, la création d\'ébauches, les audits SEO techniques et les rapports d\'optimisation hebdomadaires depuis un pipeline autonome unique.',
+       ctaTitle: 'Prêt à déployer votre premier workflow autonome ?',
+       ctaSub: 'Obtenez en quelques jours une évaluation personnalisée de l\'adéquation architecture/sécurité ainsi qu\'un plan pilote.',
+       ctaDemo: 'Demander une démo',
+       briefEN: 'Télécharger la présentation (EN)', briefFR: 'Télécharger la présentation (FR)',
+       footerText: '© Aletheion — Plateforme d\'intelligence autonome. Conçue pour les équipes opérations, sécurité et les fondateurs.',
+       htmlLang: 'fr'
+     }
+   };
+   345|
+   346|      function setLang(lang){
+   347|        const m=t[lang];
+   348|        Object.keys(m).forEach(k=>{
+   349|          if(k==='htmlLang') return;
+   350|          const el=document.getElementById(k);
+   351|          if(!el) return;
+   352|          if(k==='eyebrow') el.innerHTML=m[k]; else el.textContent=m[k];
+   353|        });
+   354|        document.documentElement.lang = m.htmlLang;
+   355|        document.getElementById('langEN').classList.toggle('active', lang==='en');
+   356|        document.getElementById('langFR').classList.toggle('active', lang==='fr');
+   357|      }
+   358|
+   359|      document.getElementById('langEN').addEventListener('click',()=>setLang('en'));
+   360|      document.getElementById('langFR').addEventListener('click',()=>setLang('fr'));
+   361|      setLang('en');
+   362|    })();
+   363|  </script>
+   364|</body>
+   365|</html>
