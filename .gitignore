@@ -1,0 +1,5 @@
+.wrangler/
+*.bak
+*.bak-*
+*.log
+.DS_Store
